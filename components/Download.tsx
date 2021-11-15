@@ -40,7 +40,7 @@ export default function DownloadDialog({
       const response = await axios.get(
         `https://vercel-torrent-scrapper.vercel.app/api/${data.provider}/get?link=${data.link}`
       );
-      if (response.data?.result) {
+      if (response?.data?.result) {
         if (response.data.result?.torrent_file) {
           window.location.href = response.data.result.torrent_file;
         } else {
@@ -62,7 +62,7 @@ export default function DownloadDialog({
       const response = await axios.get(
         `https://vercel-torrent-scrapper.vercel.app/api/${data.provider}/get?link=${data.link}`
       );
-      if (response.data?.result) {
+      if (response?.data?.result) {
         if (response.data.result?.magnet) {
           window.location.href = response.data.result.magnet;
         } else {
