@@ -35,6 +35,7 @@ export default function DownloadDialog({
   };
 
   const downloadHandler = async () => {
+    if (!data?.provider || !data?.link) return;
     setLoading(true);
     try {
       const response = await axios.get(
@@ -57,6 +58,7 @@ export default function DownloadDialog({
   };
 
   const magnetHandler = async () => {
+    if (!data?.provider || !data?.link) return;
     setLoading(true);
     try {
       const response = await axios.get(
