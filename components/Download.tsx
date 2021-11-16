@@ -34,30 +34,10 @@ export default function DownloadDialog({
     setOpen(false);
   };
 
-  const downloadHandler = async () => {
-    if (!data?.provider || !data?.link) return;
-    setLoading(true);
-    try {
-      const response = await axios.get(
-        `https://vercel-torrent-scrapper.vercel.app/api/${data.provider}/get?link=${data.link}`
-      );
-      if (response?.data?.result) {
-        if (response.data.result?.torrent_file) {
-          window.location.href = response.data.result.torrent_file;
-        } else {
-          setError("Could not download file.");
-        }
-        setLoading(false);
-      }
-      setLoading(false);
-    } catch (error) {
-      setError("Something went wrong.");
-      setLoading(false);
-      console.log(error);
-    }
-  };
-
   const magnetHandler = async () => {
+    if (data?.provider === "nyaa") {
+      if (data?.link) return (window.location.href = data.link);
+    }
     if (!data?.provider || !data?.link) return;
     setLoading(true);
     try {
@@ -116,10 +96,6 @@ export default function DownloadDialog({
             <div onClick={magnetHandler}>
               <VscMagnet className="action-icon" />
               <div> Magnet</div>
-            </div>
-            <div onClick={downloadHandler}>
-              <ImDownload3 className="action-icon" />
-              <div>Download</div>
             </div>
           </div>
           <div className="center">

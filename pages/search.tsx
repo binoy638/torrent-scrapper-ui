@@ -16,7 +16,6 @@ import {
   ImUpload3,
   ImDownload3,
 } from "react-icons/im";
-import { Preview } from "@mui/icons-material";
 
 const convertToBytes = (str: string) => {
   const times: { [char: string]: number } = {
@@ -38,8 +37,9 @@ export interface TorrentData {
   leeches: number;
   seeds: number;
   size: string;
-  uploader: string;
+  uploader?: string;
   link: string;
+  file?: string;
   provider: Provider;
 }
 
@@ -88,6 +88,7 @@ const Search: NextPage = () => {
     setLoading(true);
     setProvider(router.query.site as Provider);
     setQuery(router.query.query as string);
+
     fetchData(router.query.query as string, router.query.site as Provider);
   }, [router, router.isReady]);
 
@@ -211,6 +212,7 @@ const Search: NextPage = () => {
                 >
                   Leechers
                 </th>
+
                 <th className="priority-2">Uploader</th>
               </tr>
             </thead>
@@ -275,12 +277,3 @@ const Search: NextPage = () => {
 };
 
 export default Search;
-// if (arrayItemA.seeds < arrayItemB.seeds) {
-//   return -1;
-// }
-
-// if (arrayItemA.seeds > arrayItemB.seeds) {
-//   return 1;
-// }
-
-// return 0;

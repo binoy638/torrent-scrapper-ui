@@ -41,6 +41,14 @@ function SearchBar({
         <label>
           <input
             type="checkbox"
+            checked={provider === "threesven"}
+            onChange={() => setProvider("threesven")}
+          />
+          1337x
+        </label>
+        <label>
+          <input
+            type="checkbox"
             checked={provider === "rarbg"}
             onChange={() => setProvider("rarbg")}
           />
@@ -54,13 +62,14 @@ function SearchBar({
           />
           The Pirate Bay
         </label>
+
         <label>
           <input
             type="checkbox"
-            checked={provider === "threesven"}
-            onChange={() => setProvider("threesven")}
+            checked={provider === "nyaa"}
+            onChange={() => setProvider("nyaa")}
           />
-          1337x
+          Nyaa
         </label>
       </div>
     </form>
