@@ -1,12 +1,21 @@
 @media only screen and (max-width: 500px) {
+    .search-bar {
+        input {
+            width: 15rem;
+        }
+    }
     .search-page-input {
-        width: 14rem;
+        width: 15rem;
     }
     .priority-2 {
         display: none;
     }
-    .table-container {
-        margin: 0 !important;
+    .search-result-container {
+        padding-top: 2rem;
+        .table-container {
+            margin: auto;
+            padding: 1rem;
+        }
     }
     .download-dialog-container {
         min-width: 10rem;
