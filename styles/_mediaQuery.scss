@@ -1,0 +1,26 @@
+@media only screen and (max-width: 500px) {
+    .search-page-input {
+        width: 14rem;
+    }
+    .priority-2 {
+        display: none;
+    }
+    .table-container {
+        margin: 0 !important;
+    }
+    .download-dialog-container {
+        min-width: 10rem;
+        .title {
+            font-size: 14px;
+        }
+        .info {
+            font-size: 10px;
+        }
+        .action {
+            font-size: 14px;
+            .action-icon {
+                font-size: 24px;
+            }
+        }
+    }
+}

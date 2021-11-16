@@ -9,14 +9,14 @@ interface SearchBarProps {
   submitHandler: (event: ChangeEvent<HTMLFormElement>) => void;
   provider: Provider;
   setProvider: React.Dispatch<React.SetStateAction<Provider>>;
-  width?: string;
+  clas?: string;
 }
 
 function SearchBar({
   query,
   setQuery,
   submitHandler,
-  width,
+  clas,
   provider,
   setProvider,
 }: SearchBarProps) {
@@ -31,8 +31,7 @@ function SearchBar({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search..."
-          className="search center"
-          style={{ width: width }}
+          className={clas ? `${clas} search center` : "search center"}
         />
         <button type="submit" className="center">
           <ImSearch />

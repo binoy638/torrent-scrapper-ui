@@ -51,13 +51,31 @@ const Search: NextPage = () => {
           ...r,
           provider,
         }));
-        console.log(newData);
         setResult(newData);
         setLoading(false);
       }
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const filterBySeedersHandler = () => {
+    // console.log("inside");
+    const newData = [...result].sort(
+      (arrayItemA: TorrentData, arrayItemB: TorrentData) => {
+        if (arrayItemA.seeds < arrayItemB.seeds) {
+          return -1;
+        }
+
+        if (arrayItemA.seeds > arrayItemB.seeds) {
+          return 1;
+        }
+
+        return 0;
+      }
+    );
+    console.log(newData);
+    setResult(newData);
   };
 
   const submitHandler = (event: ChangeEvent<HTMLFormElement>) => {
@@ -87,7 +105,7 @@ const Search: NextPage = () => {
           submitHandler={submitHandler}
           provider={provider}
           setProvider={setProvider}
-          width="25rem"
+          clas="search-page-input"
         />
       </div>
 
@@ -101,11 +119,13 @@ const Search: NextPage = () => {
           <table>
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Size</th>
-                <th>Seeders</th>
-                <th>Leechers</th>
-                <th>Uploader</th>
+                <th className="priority-1">Name</th>
+                <th className="priority-2">Size</th>
+                <th className="priority-2" onClick={filterBySeedersHandler}>
+                  Seeders
+                </th>
+                <th className="priority-2">Leechers</th>
+                <th className="priority-2">Uploader</th>
               </tr>
             </thead>
 
@@ -119,11 +139,11 @@ const Search: NextPage = () => {
                       setDialogData(r);
                     }}
                   >
-                    <td className="name">{r.name}</td>
-                    <td>{r.size}</td>
-                    <td className="seeder">{r.seeds}</td>
-                    <td className="leecher">{r.leeches}</td>
-                    <td className="uploader">{r.uploader}</td>
+                    <td className="name priority-1">{r.name}</td>
+                    <td className="priority-2">{r.size}</td>
+                    <td className="seeder priority-2">{r.seeds}</td>
+                    <td className="leecher priority-2">{r.leeches}</td>
+                    <td className="uploader priority-2">{r.uploader}</td>
                   </tr>
                 );
               })}

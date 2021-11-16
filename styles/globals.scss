@@ -1,9 +1,13 @@
-@import url("https://fonts.googleapis.com/css?family=Roboto");
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 
 $color-primary: #111114;
-$color-secondary: #181731;
+$color-secondary: #131127;
 $color-text-primary: #94b4da;
 $color-text-secondary: #94b4da96;
+
+$sm: 400px;
+$md: 800px;
+$lg: 1200px;
 
 // #26264c
 // #1a1a2e
@@ -12,7 +16,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: "Roboto", sans-serif;
+
   background-color: $color-primary;
   height: 100vh;
   color: $color-text-primary;
@@ -24,6 +28,7 @@ a {
 }
 
 * {
+  font-family: "Poppins", sans-serif;
   box-sizing: border-box;
 }
 
@@ -104,16 +109,16 @@ a {
         padding: 12px 15px;
       }
       .leecher {
-        color: red;
+        color: rgb(247, 23, 23);
       }
       .seeder {
-        color: rgb(0, 128, 0);
+        color: rgb(40, 241, 40);
       }
       .uploader {
-        color: purple;
+        color: rgb(190, 28, 223);
       }
       .name {
-        color: royalblue;
+        color: rgb(95, 132, 241);
       }
     }
   }
@@ -129,7 +134,8 @@ a {
 }
 
 .download-dialog-container {
-  background-color: $color-primary;
+  min-width: 30rem;
+  background-color: $color-secondary;
   color: $color-text-primary;
 
   .info {
@@ -146,7 +152,7 @@ a {
     }
   }
   .action {
-    color: rgb(78, 184, 226);
+    color: #a79de6;
     gap: 3rem;
     & > * {
       cursor: pointer;
@@ -156,5 +162,14 @@ a {
       flex-direction: column;
       gap: 0.5rem;
     }
+    .action-icon {
+      font-size: 44px;
+    }
   }
 }
+
+.search-page-input {
+  width: 25rem;
+}
+
+@import "./mediaQuery";

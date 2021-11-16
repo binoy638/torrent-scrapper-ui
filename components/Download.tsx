@@ -88,33 +88,37 @@ export default function DownloadDialog({
       aria-describedby="alert-dialog-description"
     >
       <div className="download-dialog-container">
-        <DialogTitle id="alert-dialog-title">{data && data.name}</DialogTitle>
+        <DialogTitle className="title" id="alert-dialog-title">
+          {data && data.name}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             <div className="info center">
               <div>
-                <ImFloppyDisk color="royalblue" />{" "}
+                <ImFloppyDisk color="rgb(95, 132, 241)" />{" "}
                 <span>{data && data.size}</span>
               </div>
               <div>
-                <ImHappy color="green" /> <span>{data && data.seeds}</span>
+                <ImHappy color="rgb(40, 241, 40)" />{" "}
+                <span>{data && data.seeds}</span>
               </div>
               <div>
-                <ImSad color="red" /> <span>{data && data.leeches}</span>
+                <ImSad color="rgb(247, 23, 23)" />{" "}
+                <span>{data && data.leeches}</span>
               </div>
               <div>
-                <ImUpload3 color="purple" />
+                <ImUpload3 color="rgb(190, 28, 223)" />
                 <span>{data && data.uploader}</span>
               </div>
             </div>
           </DialogContentText>
           <div className="action center">
             <div onClick={magnetHandler}>
-              <VscMagnet size="50" />
+              <VscMagnet className="action-icon" />
               <div> Magnet</div>
             </div>
             <div onClick={downloadHandler}>
-              <ImDownload3 size="50" />
+              <ImDownload3 className="action-icon" />
               <div>Download</div>
             </div>
           </div>
