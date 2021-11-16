@@ -9,6 +9,29 @@ import Download from "../components/Download";
 import Snackbar from "@mui/material/Snackbar";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
+import {
+  ImFloppyDisk,
+  ImHappy,
+  ImSad,
+  ImUpload3,
+  ImDownload3,
+} from "react-icons/im";
+import { Preview } from "@mui/icons-material";
+
+const convertToBytes = (str: string) => {
+  const times: { [char: string]: number } = {
+    kb: 1,
+    mb: 2,
+    gb: 3,
+    tb: 4,
+  };
+  const byteSequence = str.trim().slice(-2).toLowerCase();
+  const num = str
+    .trim()
+    .slice(0, str.trim().length - 2)
+    .trim();
+  return +num * Math.pow(1024, times[byteSequence]);
+};
 
 export interface TorrentData {
   name: string;
@@ -20,16 +43,43 @@ export interface TorrentData {
   provider: Provider;
 }
 
+type FilterState = null | "asc" | "dsc";
+
+interface Filter {
+  size: FilterState;
+  seeds: FilterState;
+  leeches: FilterState;
+}
+
+const nextFilterState = (current: FilterState) => {
+  if (current === null) return "dsc";
+  if (current === "dsc") return "asc";
+  else return "dsc";
+};
+
 const Search: NextPage = () => {
+  const [filter, setFilter] = useState<Filter>({
+    size: null,
+    seeds: null,
+    leeches: null,
+  });
+
   const [error, setError] = useState<null | string>(null);
+
   const [dopen, setOpen] = useState(false);
+
   const [dialogData, setDialogData] = useState<TorrentData | null>(null);
+
   const router = useRouter();
+
   const [provider, setProvider] = useState<Provider>(
     router.query.site as Provider
   );
+
   const [query, setQuery] = useState("");
+
   const [loading, setLoading] = useState(true);
+
   const [result, setResult] = useState<TorrentData[]>([]);
 
   useEffect(() => {
@@ -59,24 +109,44 @@ const Search: NextPage = () => {
     }
   };
 
-  const filterBySeedersHandler = () => {
-    // console.log("inside");
+  const filterHandler = (col: "seeds" | "leeches" | "size") => {
+    const currentFilter = filter[col];
+
+    const nextFilter = nextFilterState(currentFilter);
+
+    if (col === "size") {
+      const newData = [...result].sort(
+        (arrayItemA: TorrentData, arrayItemB: TorrentData) => {
+          if (nextFilter === "asc")
+            return (
+              +convertToBytes(arrayItemA[col]) -
+              +convertToBytes(arrayItemB[col])
+            );
+          else
+            return (
+              +convertToBytes(arrayItemB[col]) -
+              +convertToBytes(arrayItemA[col])
+            );
+        }
+      );
+      setFilter((previous) => ({ ...previous, [col]: nextFilter }));
+      setResult(newData);
+      return;
+    }
     const newData = [...result].sort(
       (arrayItemA: TorrentData, arrayItemB: TorrentData) => {
-        if (arrayItemA.seeds < arrayItemB.seeds) {
-          return -1;
-        }
-
-        if (arrayItemA.seeds > arrayItemB.seeds) {
-          return 1;
-        }
-
-        return 0;
+        if (nextFilter === "asc") return +arrayItemA[col] - +arrayItemB[col];
+        else return +arrayItemB[col] - +arrayItemA[col];
       }
     );
-    console.log(newData);
+
+    setFilter((previous) => ({ ...previous, [col]: nextFilter }));
     setResult(newData);
   };
+
+  useEffect(() => {
+    console.log(filter);
+  }, [filter]);
 
   const submitHandler = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -119,12 +189,28 @@ const Search: NextPage = () => {
           <table>
             <thead>
               <tr>
-                <th className="priority-1">Name</th>
-                <th className="priority-2">Size</th>
-                <th className="priority-2" onClick={filterBySeedersHandler}>
+                <th className="priority-1">Torrent</th>
+                <th
+                  className="priority-2"
+                  onClick={() => filterHandler("size")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Size
+                </th>
+                <th
+                  className="priority-2"
+                  onClick={() => filterHandler("seeds")}
+                  style={{ cursor: "pointer" }}
+                >
                   Seeders
                 </th>
-                <th className="priority-2">Leechers</th>
+                <th
+                  className="priority-2"
+                  onClick={() => filterHandler("leeches")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Leechers
+                </th>
                 <th className="priority-2">Uploader</th>
               </tr>
             </thead>
@@ -139,7 +225,27 @@ const Search: NextPage = () => {
                       setDialogData(r);
                     }}
                   >
-                    <td className="name priority-1">{r.name}</td>
+                    <td className="name priority-1">
+                      <div>{r.name}</div>
+                      <div className="additional-info">
+                        <div>
+                          <ImFloppyDisk color="rgb(95, 132, 241)" />{" "}
+                          <span>{r.size}</span>
+                        </div>
+                        <div>
+                          <ImHappy color="rgb(40, 241, 40)" />{" "}
+                          <span>{r.seeds}</span>
+                        </div>
+                        <div>
+                          <ImSad color="rgb(247, 23, 23)" />{" "}
+                          <span>{r.leeches}</span>
+                        </div>
+                        <div>
+                          <ImUpload3 color="rgb(190, 28, 223)" />
+                          <span>{r.uploader}</span>
+                        </div>
+                      </div>
+                    </td>
                     <td className="priority-2">{r.size}</td>
                     <td className="seeder priority-2">{r.seeds}</td>
                     <td className="leecher priority-2">{r.leeches}</td>
@@ -169,3 +275,12 @@ const Search: NextPage = () => {
 };
 
 export default Search;
+// if (arrayItemA.seeds < arrayItemB.seeds) {
+//   return -1;
+// }
+
+// if (arrayItemA.seeds > arrayItemB.seeds) {
+//   return 1;
+// }
+
+// return 0;

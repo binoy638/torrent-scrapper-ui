@@ -15,6 +15,15 @@
         .table-container {
             margin: auto;
             padding: 1rem;
+            table {
+                .additional-info {
+                    margin-top: 1rem;
+                    display: block;
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 12px;
+                }
+            }
         }
     }
     .download-dialog-container {
