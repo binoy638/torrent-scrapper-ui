@@ -1,9 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,600;0,700;0,900;1,400&display=swap");
 
 $color-primary: #111114;
 $color-secondary: #131127;
-$color-text-primary: #94b4da;
-$color-text-secondary: #94b4da96;
+$color-text-primary: #909090;
+$color-text-secondary: #a3a3a3;
+$color-highlight: #a52eff;
 
 $sm: 400px;
 $md: 800px;
@@ -12,12 +13,13 @@ $lg: 1200px;
 // #26264c
 // #1a1a2e
 
-html,
 body {
   padding: 0;
   margin: 0;
-
-  background-color: $color-primary;
+  background-image: url("../assets/wave.svg");
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-color: #292929;
   height: 100vh;
   color: $color-text-primary;
 }
@@ -28,7 +30,7 @@ a {
 }
 
 * {
-  font-family: "Poppins", sans-serif;
+  font-family: "Montserrat", sans-serif;
   box-sizing: border-box;
 }
 
@@ -42,26 +44,50 @@ a {
   height: 100vh;
   flex-direction: column;
   gap: 1rem;
+  .heading {
+    flex-direction: column;
+
+    h1 {
+      margin-bottom: 1rem;
+      font-size: 3rem;
+      font-weight: bold;
+      span {
+        color: $color-highlight;
+      }
+    }
+    p {
+      margin-bottom: 2rem;
+    }
+  }
 }
 
 .search-bar {
+  width: 40rem;
+  margin-bottom: 2rem;
   input {
+    color: $color-text-secondary;
+    background-color: #505050;
     font-size: 1rem;
-    height: 2.5rem;
-    border-radius: 5px 0px 0px 5px;
+    height: 3rem;
+    width: 100%;
+    border-radius: 50px 0px 0px 50px;
     border: none;
-    padding-left: 1rem;
+    padding-left: 1.5rem;
     &:focus {
       outline: none;
     }
+    &::placeholder {
+      color: $color-text-secondary;
+    }
   }
   button {
-    background-color: #a79de6;
+    background-color: #505050;
     font-size: 1.3rem;
-    height: 2.5rem;
-    width: 3rem;
+    height: 3rem;
+    width: 4rem;
+    padding-right: 1.5rem;
     border: none;
-    border-radius: 0px 5px 5px 0px;
+    border-radius: 0px 50px 50px 0px;
     cursor: pointer;
   }
   .select-input {
@@ -173,6 +199,13 @@ a {
 
 .search-page-input {
   width: 25rem;
+}
+
+.wave {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  color: red;
 }
 
 @import "./mediaQuery";

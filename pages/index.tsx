@@ -18,6 +18,14 @@ const Home: NextPage = () => {
 
   return (
     <div className="main-container center">
+      <div className="heading center">
+        <h1>
+          Torrent <span>Ocean</span>{" "}
+        </h1>
+        <p>
+          Safest place to download torrents. <span>NO VPN NEEDED!</span>
+        </p>
+      </div>
       <SearchBar
         query={query}
         setQuery={setQuery}

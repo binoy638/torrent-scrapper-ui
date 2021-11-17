@@ -34,7 +34,7 @@ function SearchBar({
           className={clas ? `${clas} search center` : "search center"}
         />
         <button type="submit" className="center">
-          <ImSearch />
+          <ImSearch color="#a3a3a3" />
         </button>
       </div>
       <div className="checkbox center">
