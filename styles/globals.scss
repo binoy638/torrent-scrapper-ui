@@ -16,9 +16,8 @@ $lg: 1200px;
 body {
   padding: 0;
   margin: 0;
-  background-image: url("../assets/wave.svg");
-  background-repeat: no-repeat;
-  background-position: bottom;
+  background: url("../assets/wave.svg") fixed no-repeat bottom;
+
   background-color: #292929;
   height: 100vh;
   color: $color-text-primary;
