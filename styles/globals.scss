@@ -109,7 +109,7 @@ a {
   height: 100vh;
   .table-container {
     margin: 5rem 2rem 0 2rem;
-    background-color: $color-secondary;
+    background-color: #1a1919;
     padding: 2rem;
     border-radius: 5px;
     // padding-left: 3rem;
@@ -126,7 +126,7 @@ a {
       }
       tbody {
         tr:hover {
-          background-color: #31315e;
+          background-color: #313030;
           cursor: pointer;
         }
       }
