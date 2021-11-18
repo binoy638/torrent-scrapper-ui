@@ -1,6 +1,7 @@
 @media only screen and (max-width: 500px) {
     .main-container {
         width: 600px;
+        overflow: hidden;
         margin-top: 5rem;
     }
     .search-bar {
