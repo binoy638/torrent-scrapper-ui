@@ -1,8 +1,10 @@
 @media only screen and (max-width: 500px) {
+    .main-container {
+        width: 600px;
+        margin-top: 5rem;
+    }
     .search-bar {
-        input {
-            width: 15rem;
-        }
+        width: 30rem;
     }
     .search-page-input {
         width: 15rem;
@@ -40,11 +42,5 @@
                 font-size: 24px;
             }
         }
-    }
-    .checkbox {
-        font-size: 0.7em;
-
-        justify-content: space-evenly;
-        margin-bottom: 1rem;
     }
 }

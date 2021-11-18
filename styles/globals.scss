@@ -1,24 +1,17 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,600;0,700;0,900;1,400&display=swap");
 
-$color-primary: #111114;
-$color-secondary: #131127;
+$color-primary: #292929;
+$color-secondary: #505050;
 $color-text-primary: #909090;
 $color-text-secondary: #a3a3a3;
 $color-highlight: #a52eff;
-
-$sm: 400px;
-$md: 800px;
-$lg: 1200px;
-
-// #26264c
-// #1a1a2e
 
 body {
   padding: 0;
   margin: 0;
   background: url("../assets/wave.svg") fixed no-repeat bottom;
 
-  background-color: #292929;
+  background-color: $color-primary;
   height: 100vh;
   color: $color-text-primary;
 }
@@ -41,21 +34,28 @@ a {
 
 .main-container {
   height: 100vh;
-  flex-direction: column;
-  gap: 1rem;
-  .heading {
-    flex-direction: column;
 
-    h1 {
-      margin-bottom: 1rem;
-      font-size: 3rem;
-      font-weight: bold;
-      span {
-        color: $color-highlight;
+  .wrapper {
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 5rem;
+    .heading {
+      flex-direction: column;
+
+      h1 {
+        margin-bottom: 1rem;
+        font-size: 3rem;
+        font-weight: bold;
+        span {
+          color: $color-highlight;
+        }
       }
-    }
-    p {
-      margin-bottom: 2rem;
+      p {
+        margin-bottom: 2rem;
+        span {
+          color: $color-text-secondary;
+        }
+      }
     }
   }
 }
@@ -65,7 +65,7 @@ a {
   margin-bottom: 2rem;
   input {
     color: $color-text-secondary;
-    background-color: #505050;
+    background-color: $color-secondary;
     font-size: 1rem;
     height: 3rem;
     width: 100%;
@@ -80,7 +80,7 @@ a {
     }
   }
   button {
-    background-color: #505050;
+    background-color: $color-secondary;
     font-size: 1.3rem;
     height: 3rem;
     width: 4rem;
@@ -118,7 +118,6 @@ a {
       width: 100%;
       thead {
         border-radius: 50px;
-        // background-color: #3b3b79;
         text-align: left;
         font-weight: bold;
         border-bottom: solid 1px;
@@ -198,13 +197,6 @@ a {
 
 .search-page-input {
   width: 25rem;
-}
-
-.wave {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  color: red;
 }
 
 @import "./mediaQuery";
