@@ -66,6 +66,10 @@ const Search: NextPage = () => {
 
   const [error, setError] = useState<null | string>(null);
 
+  const [loading, setLoading] = useState(true);
+
+  const [result, setResult] = useState<TorrentData[]>([]);
+
   const [dopen, setOpen] = useState(false);
 
   const [dialogData, setDialogData] = useState<TorrentData | null>(null);
@@ -77,10 +81,6 @@ const Search: NextPage = () => {
   );
 
   const [query, setQuery] = useState("");
-
-  const [loading, setLoading] = useState(true);
-
-  const [result, setResult] = useState<TorrentData[]>([]);
 
   useEffect(() => {
     if (!router.isReady) return;
