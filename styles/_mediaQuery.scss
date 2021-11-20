@@ -1,13 +1,12 @@
 @media only screen and (max-width: 500px) {
     html,
     body {
-        overflow-x: hidden;
         background-size: 2000px;
     }
     .main-container {
         width: 600px;
         overflow: hidden;
-        margin-top: 5rem;
+        margin-top: 10rem;
     }
     .search-bar {
         margin-left: 0.5rem;
