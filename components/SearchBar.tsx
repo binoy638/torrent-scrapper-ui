@@ -1,7 +1,7 @@
 import React from "react";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent } from "react";
 import { ImSearch } from "react-icons/im";
-import { Provider } from "../pages/index";
+import { Provider } from "../@types";
 
 interface SearchBarProps {
   query: string;
@@ -41,8 +41,8 @@ function SearchBar({
         <label>
           <input
             type="checkbox"
-            checked={provider === "threesven"}
-            onChange={() => setProvider("threesven")}
+            checked={provider === "1337"}
+            onChange={() => setProvider("1337")}
           />
           1337x
         </label>

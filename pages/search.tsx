@@ -4,58 +4,13 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import SearchBar from "../components/SearchBar";
 import Loader from "react-loader-spinner";
 import axios from "axios";
-import { Provider } from ".";
+import { Provider, TorrentData, FilterState, Filter } from "../@types";
 import Download from "../components/Download";
 import Snackbar from "@mui/material/Snackbar";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
-import {
-  ImFloppyDisk,
-  ImHappy,
-  ImSad,
-  ImUpload3,
-  ImDownload3,
-} from "react-icons/im";
-
-const convertToBytes = (str: string) => {
-  const times: { [char: string]: number } = {
-    kb: 1,
-    mb: 2,
-    gb: 3,
-    tb: 4,
-  };
-  const byteSequence = str.trim().slice(-2).toLowerCase();
-  const num = str
-    .trim()
-    .slice(0, str.trim().length - 2)
-    .trim();
-  return +num * Math.pow(1024, times[byteSequence]);
-};
-
-export interface TorrentData {
-  name: string;
-  leeches: number;
-  seeds: number;
-  size: string;
-  uploader?: string;
-  link: string;
-  file?: string;
-  provider: Provider;
-}
-
-type FilterState = null | "asc" | "dsc";
-
-interface Filter {
-  size: FilterState;
-  seeds: FilterState;
-  leeches: FilterState;
-}
-
-const nextFilterState = (current: FilterState) => {
-  if (current === null) return "dsc";
-  if (current === "dsc") return "asc";
-  else return "dsc";
-};
+import { ImFloppyDisk, ImHappy, ImSad, ImUpload3 } from "react-icons/im";
+import { convertToBytes, nextFilterState } from "../utils";
 
 const Search: NextPage = () => {
   const [filter, setFilter] = useState<Filter>({

@@ -3,9 +3,8 @@ import Dialog from "@mui/material/Dialog";
 import Loader from "react-loader-spinner";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
-
+import { TorrentData } from "../@types";
 import DialogTitle from "@mui/material/DialogTitle";
-import { TorrentData } from "../pages/search";
 import { VscMagnet } from "react-icons/vsc";
 import {
   ImFloppyDisk,
@@ -16,7 +15,7 @@ import {
 } from "react-icons/im";
 import axios from "axios";
 
-interface DownloadDialogProps {
+export interface DownloadDialogProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   data: TorrentData | null;

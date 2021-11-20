@@ -3,13 +3,12 @@ import { ChangeEvent, useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import SearchBar from "../components/SearchBar";
-
-export type Provider = "rarbg" | "piratebay" | "threesven" | "nyaa";
+import { Provider } from "../@types";
 
 const Home: NextPage = () => {
   const router = useRouter();
   const [query, setQuery] = useState("");
-  const [provider, setProvider] = useState<Provider>("threesven");
+  const [provider, setProvider] = useState<Provider>("1337");
 
   const submitHandler = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
