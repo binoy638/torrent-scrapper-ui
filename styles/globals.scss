@@ -104,46 +104,83 @@ a {
 }
 
 .search-result-container {
-  padding-top: 3rem;
-  height: 100vh;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  // height: 100vh;
+
   .table-container {
-    margin: 5rem 2rem 0 2rem;
+    margin: 3rem 2rem 0 2rem;
     background-color: #1a1919;
     padding: 2rem;
     border-radius: 5px;
+    overflow-x: auto;
+    overflow-y: hidden;
+
     // padding-left: 3rem;
     table {
+      display: grid;
       border-collapse: collapse;
-      font-size: 0.9em;
-      width: 100%;
-      thead {
-        border-radius: 50px;
-        text-align: left;
-        font-weight: bold;
-        border-bottom: solid 1px;
+      min-width: 100%;
+      grid-template-columns:
+        minmax(300px, 3fr)
+        minmax(150px, 1fr)
+        minmax(150px, 1fr)
+        minmax(150px, 1fr)
+        minmax(150px, 1fr);
+      thead,
+      tbody,
+      tr {
+        display: contents;
       }
-      tbody {
-        tr:hover {
-          background-color: #313030;
-          cursor: pointer;
-        }
-      }
+
       th,
       td {
-        padding: 12px 15px;
+        padding: 1rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
+      th {
+        padding: 1rem;
+        text-align: left;
+        font-weight: normal;
+        font-size: 1.1rem;
+      }
+      tr:hover td {
+        background: $color-secondary;
+        cursor: pointer;
+      }
+
+      // font-size: 0.9em;
+      // width: 100%;
+      // thead {
+      //   border-radius: 50px;
+      //   text-align: left;
+      //   font-weight: bold;
+      //   border-bottom: solid 1px;
+      // }
+      // tbody {
+      //   tr:hover {
+      //     background-color: #bdb3b3;
+      //     cursor: pointer;
+      //   }
+      // }
+      // th,
+      // td {
+      //   padding: 12px 15px;
+      // }
       .leecher {
         color: rgb(247, 23, 23);
       }
       .seeder {
         color: rgb(40, 241, 40);
       }
-      .uploader {
-        color: rgb(190, 28, 223);
-      }
-      .name {
-        color: rgb(95, 132, 241);
-      }
+      // .uploader {
+      //   color: rgb(190, 28, 223);
+      // }
+      // .name {
+      //   color: rgb(95, 132, 241);
+      // }
       .additional-info {
         display: none;
       }
