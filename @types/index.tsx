@@ -9,6 +9,7 @@ export interface TorrentData {
   link: string;
   file?: string;
   provider: Provider;
+  added: number;
 }
 
 export type FilterState = null | "asc" | "dsc";
@@ -17,4 +18,5 @@ export interface Filter {
   size: FilterState;
   seeds: FilterState;
   leeches: FilterState;
+  added: FilterState;
 }

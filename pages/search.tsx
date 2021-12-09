@@ -17,6 +17,7 @@ const Search: NextPage = () => {
     size: null,
     seeds: null,
     leeches: null,
+    added: null,
   });
 
   const [error, setError] = useState<null | string>(null);
@@ -65,7 +66,7 @@ const Search: NextPage = () => {
     }
   };
 
-  const filterHandler = (col: "seeds" | "leeches" | "size") => {
+  const filterHandler = (col: "seeds" | "leeches" | "size" | "added") => {
     const currentFilter = filter[col];
 
     const nextFilter = nextFilterState(currentFilter);
@@ -167,7 +168,13 @@ const Search: NextPage = () => {
                 >
                   Leechers
                 </th>
-
+                <th
+                  className="priority-2"
+                  onClick={() => filterHandler("added")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Date
+                </th>
                 <th className="priority-2">Uploader</th>
               </tr>
             </thead>
@@ -206,6 +213,9 @@ const Search: NextPage = () => {
                     <td className="priority-2">{r.size}</td>
                     <td className="seeder priority-2">{r.seeds}</td>
                     <td className="leecher priority-2">{r.leeches}</td>
+                    <td className="priority-2">
+                      {new Date(r.added * 1000).toDateString()}
+                    </td>
                     <td className="uploader priority-2">{r.uploader}</td>
                   </tr>
                 );
