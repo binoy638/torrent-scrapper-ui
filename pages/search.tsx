@@ -59,10 +59,11 @@ const Search: NextPage = () => {
           provider,
         }));
         setResult(newData);
-        setLoading(false);
       }
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -180,46 +181,47 @@ const Search: NextPage = () => {
             </thead>
 
             <tbody>
-              {result.map((r) => {
-                return (
-                  <tr
-                    key={r.name}
-                    onClick={() => {
-                      setOpen(true);
-                      setDialogData(r);
-                    }}
-                  >
-                    <td className="name priority-1">
-                      <div>{r.name}</div>
-                      <div className="additional-info">
-                        <div>
-                          <ImFloppyDisk color="rgb(95, 132, 241)" />{" "}
-                          <span>{r.size}</span>
+              {result &&
+                result.map((r) => {
+                  return (
+                    <tr
+                      key={r.name}
+                      onClick={() => {
+                        setOpen(true);
+                        setDialogData(r);
+                      }}
+                    >
+                      <td className="name priority-1">
+                        <div>{r.name}</div>
+                        <div className="additional-info">
+                          <div>
+                            <ImFloppyDisk color="rgb(95, 132, 241)" />{" "}
+                            <span>{r.size}</span>
+                          </div>
+                          <div>
+                            <ImHappy color="rgb(40, 241, 40)" />{" "}
+                            <span>{r.seeds}</span>
+                          </div>
+                          <div>
+                            <ImSad color="rgb(247, 23, 23)" />{" "}
+                            <span>{r.leeches}</span>
+                          </div>
+                          <div>
+                            <ImUpload3 color="rgb(190, 28, 223)" />
+                            <span>{r.uploader}</span>
+                          </div>
                         </div>
-                        <div>
-                          <ImHappy color="rgb(40, 241, 40)" />{" "}
-                          <span>{r.seeds}</span>
-                        </div>
-                        <div>
-                          <ImSad color="rgb(247, 23, 23)" />{" "}
-                          <span>{r.leeches}</span>
-                        </div>
-                        <div>
-                          <ImUpload3 color="rgb(190, 28, 223)" />
-                          <span>{r.uploader}</span>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="priority-2">{r.size}</td>
-                    <td className="seeder priority-2">{r.seeds}</td>
-                    <td className="leecher priority-2">{r.leeches}</td>
-                    <td className="priority-2">
-                      {new Date(r.added * 1000).toDateString()}
-                    </td>
-                    <td className="uploader priority-2">{r.uploader}</td>
-                  </tr>
-                );
-              })}
+                      </td>
+                      <td className="priority-2">{r.size}</td>
+                      <td className="seeder priority-2">{r.seeds}</td>
+                      <td className="leecher priority-2">{r.leeches}</td>
+                      <td className="priority-2">
+                        {new Date(r.added * 1000).toDateString()}
+                      </td>
+                      <td className="uploader priority-2">{r.uploader}</td>
+                    </tr>
+                  );
+                })}
             </tbody>
           </table>
           <Download
