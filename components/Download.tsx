@@ -32,7 +32,7 @@ export default function DownloadDialog({
   const handleClose = () => {
     setOpen(false);
   };
-
+  console.log(data);
   const magnetHandler = async () => {
     if (data?.provider === "nyaa") {
       if (data?.link) return (window.location.href = data.link);
@@ -41,11 +41,12 @@ export default function DownloadDialog({
     setLoading(true);
     try {
       const response = await axios.get(
-        `https://vercel-torrent-scrapper.vercel.app/api/${data.provider}/get?link=${data.link}`
+        `https://torrent-scrapper.backendev.com/get/${data.provider}?link=${data.link}`
       );
-      if (response?.data?.result) {
-        if (response.data.result?.magnet) {
-          window.location.href = response.data.result.magnet;
+
+      if (response.data) {
+        if (response.data.data?.magnet) {
+          window.location.href = response.data.data.magnet;
         } else {
           setError("Magnet not found.");
         }

@@ -51,10 +51,10 @@ const Search: NextPage = () => {
   const fetchData = async (searchQuery: string, provider: Provider) => {
     try {
       const { data } = await axios.get(
-        `https://vercel-torrent-scrapper.vercel.app/api/${provider}/search?q=${searchQuery}`
+        `https://torrent-scrapper.backendev.com/search/${provider}?q=${searchQuery}`
       );
-      if (data?.result) {
-        const newData = data.result.map((r: object) => ({
+      if (data?.results) {
+        const newData = data.results.map((r: object) => ({
           ...r,
           provider,
         }));

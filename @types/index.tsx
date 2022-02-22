@@ -1,4 +1,4 @@
-export type Provider = "rarbg" | "piratebay" | "1337" | "nyaa";
+export type Provider = "rarbg" | "tpb" | "1337x" | "nyaa";
 
 export interface TorrentData {
   name: string;

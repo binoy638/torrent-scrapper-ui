@@ -8,7 +8,7 @@ import { Provider } from "../@types";
 const Home: NextPage = () => {
   const router = useRouter();
   const [query, setQuery] = useState("");
-  const [provider, setProvider] = useState<Provider>("1337");
+  const [provider, setProvider] = useState<Provider>("1337x");
 
   const submitHandler = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
