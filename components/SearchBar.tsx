@@ -44,7 +44,6 @@ function SearchBar() {
     <form onSubmit={submitHandler} className="flex flex-col gap-6  ">
       <Input
         name="query"
-        value={query}
         placeholder="Search..."
         rightSection={rightSection}
       />
