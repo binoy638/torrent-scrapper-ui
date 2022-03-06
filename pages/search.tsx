@@ -96,7 +96,7 @@ const Search: NextPage = () => {
       ) : isError ? (
         <div>Something went wrong</div>
       ) : (
-        <div className="overflow-hidden overflow-x-scroll lg:overflow-x-hidden">
+        <div className="overflow-hidden overflow-x-scroll scrollbar-hide lg:overflow-x-hidden">
           <Table>
             <thead>
               <tr>
