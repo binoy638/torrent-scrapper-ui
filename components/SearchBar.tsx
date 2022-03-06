@@ -9,6 +9,8 @@ function SearchBar() {
 
   const site = router.query.site as string;
 
+  const query = router.query.query as string;
+
   const [provider, setProvider] = useState<string | string[]>("1337x");
 
   useEffect(() => {
@@ -40,7 +42,12 @@ function SearchBar() {
   );
   return (
     <form onSubmit={submitHandler} className="flex flex-col gap-6  ">
-      <Input name="query" placeholder="Search..." rightSection={rightSection} />
+      <Input
+        name="query"
+        value={query}
+        placeholder="Search..."
+        rightSection={rightSection}
+      />
       <div className="flex justify-center">
         <Chips value={provider} onChange={setProvider}>
           <Chip value="1337x">1337x</Chip>

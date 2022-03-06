@@ -54,31 +54,33 @@ export default function DownloadDialog({
   return (
     <Drawer opened={open} onClose={handleClose} position="bottom" size="40vh">
       <div className="px-4 flex h-full flex-col  gap-8  lg:py-4 items-center lg:text-2xl ">
-        <div className="flex flex-col gap-6 justify-center items-center ">
-          <div>
-            <Text lineClamp={2}>
-              <span className="text-xl lg:text-3xl overflow-hidden">
-                {data.name}
-              </span>
-            </Text>
-          </div>
+        <div className="flex  flex-col gap-6  ">
+          <Text lineClamp={2}>
+            <span className="text-lg  lg:text-3xl overflow-hidden">
+              {data.name}
+            </span>
+          </Text>
 
-          <div className="flex gap-6">
-            <div className="flex gap-1 justify-start items-center">
+          <div className="flex gap-4 lg:gap-6  justify-evenly lg:justify-center ">
+            <div className="flex flex-col lg:flex-row gap-1  items-center w-1/4  lg:w-auto">
               <DocumentDownloadIcon className="h-6 w-6 text-primary" />
               <span>{data.size}</span>
             </div>
-            <div className="flex gap-1 justify-start items-center">
+            <div className="flex gap-1 flex-col lg:flex-row  items-center sm:w-1/4 lg:w-auto">
               <ChevronDoubleDownIcon className="h-6 w-6 text-green-500" />
               <span>{data.seeds}</span>
             </div>
-            <div className="flex gap-1 justify-start items-center">
+            <div className="flex gap-1 flex-col lg:flex-row  items-center sm:w-1/4 lg:w-auto">
               <ChevronDoubleUpIcon className="h-6 w-6 text-red-500" />
               <span>{data.leeches}</span>
             </div>
-            <div className="flex gap-1 justify-start items-center">
+            <div className="flex gap-1 flex-col lg:flex-row  items-center sm:w-1/4 lg:w-auto">
               <CalendarIcon className="h-6 w-6 text-primary" />
-              <span>{new Date(data.added * 1000).toLocaleString()}</span>
+              <span className="font-sm">
+                {new Date(data.added * 1000).toLocaleString([], {
+                  dateStyle: "short",
+                })}
+              </span>
             </div>
           </div>
         </div>
