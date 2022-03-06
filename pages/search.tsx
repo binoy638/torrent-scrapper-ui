@@ -1,70 +1,43 @@
 import type { NextPage } from "next";
+import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import SearchBar from "../components/SearchBar";
-import Loader from "react-loader-spinner";
-import axios from "axios";
-import { Provider, TorrentData, FilterState, Filter } from "../@types";
-import Download from "../components/Download";
-import Snackbar from "@mui/material/Snackbar";
-import CloseIcon from "@mui/icons-material/Close";
-import IconButton from "@mui/material/IconButton";
-import { ImFloppyDisk, ImHappy, ImSad, ImUpload3 } from "react-icons/im";
+import { Provider, TorrentData, Filter } from "../@types";
+import Download from "../components/DownloadDialog";
 import { convertToBytes, nextFilterState } from "../utils";
+import useSearch from "../hooks/useSearch";
+import { Table, Loader } from "@mantine/core";
 
 const Search: NextPage = () => {
   const [filter, setFilter] = useState<Filter>({
     size: null,
-    seeds: null,
+    seeds: "dsc",
     leeches: null,
     added: null,
   });
+  const router = useRouter();
 
-  const [error, setError] = useState<null | string>(null);
+  const query = router.query.query as string;
+  const site = router.query.site as Provider;
 
-  const [loading, setLoading] = useState(true);
+  const { isLoading, isError, data } = useSearch(query, site);
 
-  const [result, setResult] = useState<TorrentData[]>([]);
+  const [torrents, setTorrents] = useState<TorrentData[]>([]);
+
+  useEffect(() => {
+    if (data) {
+      setTorrents(data);
+    }
+  }, [data]);
 
   const [dopen, setOpen] = useState(false);
 
-  const [dialogData, setDialogData] = useState<TorrentData | null>(null);
+  const [dialogData, setDialogData] = useState<TorrentData>();
 
-  const router = useRouter();
-
-  const [provider, setProvider] = useState<Provider>(
-    router.query.site as Provider
-  );
-
-  const [query, setQuery] = useState("");
-
-  useEffect(() => {
-    if (!router.isReady) return;
-
-    setLoading(true);
-    setProvider(router.query.site as Provider);
-    setQuery(router.query.query as string);
-
-    fetchData(router.query.query as string, router.query.site as Provider);
-  }, [router, router.isReady]);
-
-  const fetchData = async (searchQuery: string, provider: Provider) => {
-    try {
-      const { data } = await axios.get(
-        `https://torrent-scrapper.backendev.com/search/${provider}?q=${searchQuery}`
-      );
-      if (data?.results) {
-        const newData = data.results.map((r: object) => ({
-          ...r,
-          provider,
-        }));
-        setResult(newData);
-      }
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
+  const torrentSeleteHandler = (data: TorrentData) => {
+    setDialogData(data);
+    setOpen(true);
   };
 
   const filterHandler = (col: "seeds" | "leeches" | "size" | "added") => {
@@ -73,7 +46,7 @@ const Search: NextPage = () => {
     const nextFilter = nextFilterState(currentFilter);
 
     if (col === "size") {
-      const newData = [...result].sort(
+      const newData = [...torrents].sort(
         (arrayItemA: TorrentData, arrayItemB: TorrentData) => {
           if (nextFilter === "asc")
             return (
@@ -88,10 +61,10 @@ const Search: NextPage = () => {
         }
       );
       setFilter((previous) => ({ ...previous, [col]: nextFilter }));
-      setResult(newData);
+      setTorrents(newData);
       return;
     }
-    const newData = [...result].sort(
+    const newData = [...torrents].sort(
       (arrayItemA: TorrentData, arrayItemB: TorrentData) => {
         if (nextFilter === "asc") return +arrayItemA[col] - +arrayItemB[col];
         else return +arrayItemB[col] - +arrayItemA[col];
@@ -99,144 +72,90 @@ const Search: NextPage = () => {
     );
 
     setFilter((previous) => ({ ...previous, [col]: nextFilter }));
-    setResult(newData);
+    setTorrents(newData);
   };
-
-  useEffect(() => {
-    console.log(filter);
-  }, [filter]);
-
-  const submitHandler = (event: ChangeEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    router.push({ pathname: "/search", query: { query, site: provider } });
-  };
-
-  const action = (
-    <React.Fragment>
-      <IconButton
-        size="small"
-        aria-label="close"
-        color="inherit"
-        onClick={() => setError(null)}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
-    </React.Fragment>
-  );
 
   return (
-    <div className="search-result-container">
+    <div className="flex flex-col gap-8 ">
+      <h1 className="text-4xl lg:text-5xl font-bold gap-2 justify-center flex">
+        <Link href={"/"} passHref>
+          <a>
+            Torrent <span className="text-primary">Ocean</span>
+          </a>
+        </Link>
+      </h1>
+
       <div className="center" style={{ flexDirection: "column", gap: "1rem" }}>
-        <SearchBar
-          query={query}
-          setQuery={setQuery}
-          submitHandler={submitHandler}
-          provider={provider}
-          setProvider={setProvider}
-          clas="search-page-input"
-        />
+        <SearchBar />
       </div>
 
-      {loading ? (
-        <div className="loading-container center">
-          Searching...
-          <Loader type="TailSpin" color="#94b4da" height={50} width={50} />
+      {isLoading ? (
+        <div className="flex justify-center items-center w-full h-56">
+          <Loader className="h-6 w-6 lg:h-10 lg:w-10" color="gray" />
         </div>
+      ) : isError ? (
+        <div>Something went wrong</div>
       ) : (
-        <div className="table-container">
-          <table>
+        <div className="overflow-hidden overflow-x-scroll lg:overflow-x-hidden">
+          <Table>
             <thead>
               <tr>
-                <th className="priority-1">Torrent</th>
                 <th
-                  className="priority-2"
+                  className="cursor-pointer"
                   onClick={() => filterHandler("size")}
-                  style={{ cursor: "pointer" }}
+                >
+                  Name
+                </th>
+                <th
+                  className="cursor-pointer"
+                  onClick={() => filterHandler("size")}
                 >
                   Size
                 </th>
                 <th
-                  className="priority-2"
+                  className="cursor-pointer"
                   onClick={() => filterHandler("seeds")}
-                  style={{ cursor: "pointer" }}
                 >
-                  Seeders
+                  Seeds
                 </th>
                 <th
-                  className="priority-2"
+                  className="cursor-pointer"
                   onClick={() => filterHandler("leeches")}
-                  style={{ cursor: "pointer" }}
                 >
-                  Leechers
+                  leeches
                 </th>
                 <th
-                  className="priority-2"
+                  className="cursor-pointer"
                   onClick={() => filterHandler("added")}
-                  style={{ cursor: "pointer" }}
                 >
-                  Date
+                  Added
                 </th>
-                <th className="priority-2">Uploader</th>
+                <th>Uploader</th>
               </tr>
             </thead>
-
             <tbody>
-              {result &&
-                result.map((r) => {
-                  return (
-                    <tr
-                      key={r.name}
-                      onClick={() => {
-                        setOpen(true);
-                        setDialogData(r);
-                      }}
+              {torrents.map((torrent, index) => {
+                return (
+                  <tr key={torrent.name + index}>
+                    <td
+                      className="cursor-pointer hover:underline"
+                      onClick={() => torrentSeleteHandler(torrent)}
                     >
-                      <td className="name priority-1">
-                        <div>{r.name}</div>
-                        <div className="additional-info">
-                          <div>
-                            <ImFloppyDisk color="rgb(95, 132, 241)" />{" "}
-                            <span>{r.size}</span>
-                          </div>
-                          <div>
-                            <ImHappy color="rgb(40, 241, 40)" />{" "}
-                            <span>{r.seeds}</span>
-                          </div>
-                          <div>
-                            <ImSad color="rgb(247, 23, 23)" />{" "}
-                            <span>{r.leeches}</span>
-                          </div>
-                          <div>
-                            <ImUpload3 color="rgb(190, 28, 223)" />
-                            <span>{r.uploader}</span>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="priority-2">{r.size}</td>
-                      <td className="seeder priority-2">{r.seeds}</td>
-                      <td className="leecher priority-2">{r.leeches}</td>
-                      <td className="priority-2">
-                        {new Date(r.added * 1000).toDateString()}
-                      </td>
-                      <td className="uploader priority-2">{r.uploader}</td>
-                    </tr>
-                  );
-                })}
+                      {torrent.name}
+                    </td>
+                    <td>{torrent.size}</td>
+                    <td>{torrent.seeds}</td>
+                    <td>{torrent.leeches}</td>
+                    <td>{new Date(torrent.added * 1000).toDateString()}</td>
+                    <td>{torrent.uploader}</td>
+                  </tr>
+                );
+              })}
             </tbody>
-          </table>
-          <Download
-            open={dopen}
-            setOpen={setOpen}
-            data={dialogData}
-            setError={setError}
-          />
-          <Snackbar
-            open={error !== null}
-            autoHideDuration={6000}
-            onClose={() => setError(null)}
-            message={error ? error : ""}
-            action={action}
-          />
+          </Table>
+          {dialogData && (
+            <Download open={dopen} setOpen={setOpen} data={dialogData} />
+          )}
         </div>
       )}
     </div>

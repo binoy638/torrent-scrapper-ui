@@ -1,76 +1,53 @@
-import React from "react";
+import { Chip, Chips, Input, Tooltip, Button } from "@mantine/core";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 import { ChangeEvent } from "react";
 import { ImSearch } from "react-icons/im";
-import { Provider } from "../@types";
 
-interface SearchBarProps {
-  query: string;
-  setQuery: React.Dispatch<React.SetStateAction<string>>;
-  submitHandler: (event: ChangeEvent<HTMLFormElement>) => void;
-  provider: Provider;
-  setProvider: React.Dispatch<React.SetStateAction<Provider>>;
-  clas?: string;
-}
+function SearchBar() {
+  const router = useRouter();
 
-function SearchBar({
-  query,
-  setQuery,
-  submitHandler,
-  clas,
-  provider,
-  setProvider,
-}: SearchBarProps) {
-  return (
-    <form
-      onSubmit={submitHandler}
-      style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+  const site = router.query.site as string;
+
+  const [provider, setProvider] = useState<string | string[]>("1337x");
+
+  useEffect(() => {
+    if (
+      site === "1337x" ||
+      site === "tpb" ||
+      site === "rarbg" ||
+      site === "nyaa"
+    ) {
+      setProvider(site);
+    }
+  }, [site]);
+
+  const submitHandler = (event: ChangeEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    router.push({
+      pathname: "/search",
+      query: { query: event.target.query.value, site: provider },
+    });
+  };
+  const rightSection = (
+    <Button
+      sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+      type="submit"
     >
-      <div className=" search-bar center">
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search..."
-          className={clas ? `${clas} search center` : "search center"}
-        />
-        <button type="submit" className="center">
-          <ImSearch color="#a3a3a3" />
-        </button>
-      </div>
-      <div className="checkbox center">
-        <label>
-          <input
-            type="checkbox"
-            checked={provider === "1337x"}
-            onChange={() => setProvider("1337x")}
-          />
-          1337x
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            checked={provider === "rarbg"}
-            onChange={() => setProvider("rarbg")}
-          />
-          RARBG
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            checked={provider === "tpb"}
-            onChange={() => setProvider("tpb")}
-          />
-          The Pirate Bay
-        </label>
-
-        <label>
-          <input
-            type="checkbox"
-            checked={provider === "nyaa"}
-            onChange={() => setProvider("nyaa")}
-          />
-          Nyaa
-        </label>
+      <ImSearch />
+    </Button>
+  );
+  return (
+    <form onSubmit={submitHandler} className="flex flex-col gap-6  ">
+      <Input name="query" placeholder="Search..." rightSection={rightSection} />
+      <div className="flex justify-center">
+        <Chips value={provider} onChange={setProvider}>
+          <Chip value="1337x">1337x</Chip>
+          {/* <Chip value="rarbg">Rarbg</Chip> */}
+          <Chip value="tpb">The Pirate Bay</Chip>
+          <Chip value="nyaa">Nyaa</Chip>
+        </Chips>
       </div>
     </form>
   );
