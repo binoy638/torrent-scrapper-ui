@@ -8,6 +8,7 @@ import Download from "../components/DownloadDialog";
 import { convertToBytes, nextFilterState } from "../utils";
 import useSearch from "../hooks/useSearch";
 import { Table, Loader } from "@mantine/core";
+import { ArrowNarrowDownIcon, ArrowNarrowUpIcon } from "@heroicons/react/solid";
 
 const Search: NextPage = () => {
   const [filter, setFilter] = useState<Filter>({
@@ -60,7 +61,14 @@ const Search: NextPage = () => {
             );
         }
       );
-      setFilter((previous) => ({ ...previous, [col]: nextFilter }));
+
+      setFilter(
+        Object.assign(
+          {},
+          { size: null, seeds: null, leeches: null, added: null },
+          { [col]: nextFilter }
+        )
+      );
       setTorrents(newData);
       return;
     }
@@ -71,7 +79,13 @@ const Search: NextPage = () => {
       }
     );
 
-    setFilter((previous) => ({ ...previous, [col]: nextFilter }));
+    setFilter(
+      Object.assign(
+        {},
+        { size: null, seeds: null, leeches: null, added: null },
+        { [col]: nextFilter }
+      )
+    );
     setTorrents(newData);
   };
 
@@ -100,36 +114,31 @@ const Search: NextPage = () => {
           <Table>
             <thead>
               <tr>
-                <th
-                  className="cursor-pointer"
-                  onClick={() => filterHandler("size")}
-                >
-                  Name
-                </th>
-                <th
-                  className="cursor-pointer"
-                  onClick={() => filterHandler("size")}
-                >
-                  Size
-                </th>
-                <th
-                  className="cursor-pointer"
-                  onClick={() => filterHandler("seeds")}
-                >
-                  Seeds
-                </th>
-                <th
-                  className="cursor-pointer"
-                  onClick={() => filterHandler("leeches")}
-                >
-                  leeches
-                </th>
-                <th
-                  className="cursor-pointer"
-                  onClick={() => filterHandler("added")}
-                >
-                  Added
-                </th>
+                <th>Name</th>
+
+                <FilterHeaders
+                  label="Size"
+                  filterState={filter.size}
+                  clickHandler={() => filterHandler("size")}
+                />
+
+                <FilterHeaders
+                  label="Seeds"
+                  filterState={filter.seeds}
+                  clickHandler={() => filterHandler("seeds")}
+                />
+                <FilterHeaders
+                  label="Leeches"
+                  filterState={filter.leeches}
+                  clickHandler={() => filterHandler("leeches")}
+                />
+
+                <FilterHeaders
+                  label="Added"
+                  filterState={filter.added}
+                  clickHandler={() => filterHandler("added")}
+                />
+
                 <th>Uploader</th>
               </tr>
             </thead>
@@ -163,3 +172,29 @@ const Search: NextPage = () => {
 };
 
 export default Search;
+
+interface FilterHeadersProps {
+  label: string;
+  filterState: "asc" | "dsc" | null;
+  clickHandler: () => void;
+}
+
+const FilterHeaders = ({
+  label,
+  filterState,
+  clickHandler,
+}: FilterHeadersProps) => {
+  return (
+    <th
+      className={`cursor-pointer   ${filterState && "flex"} items-center`}
+      onClick={clickHandler}
+    >
+      {label}
+      {filterState === "asc" ? (
+        <ArrowNarrowUpIcon className="h-4 w-4 text-primary" />
+      ) : filterState === "dsc" ? (
+        <ArrowNarrowDownIcon className="h-4 w-4 text-primary" />
+      ) : null}
+    </th>
+  );
+};

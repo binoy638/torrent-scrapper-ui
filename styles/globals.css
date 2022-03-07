@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer base {
+  body {
+    -webkit-tap-highlight-color: transparent !important;
+  }
   body::-webkit-scrollbar {
     display: none;
   }

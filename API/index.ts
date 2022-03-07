@@ -6,6 +6,7 @@ export const searchTorrentAPI = async (
   provider: Provider
 ): Promise<TorrentData[]> => {
   try {
+    if (!query || !provider) throw new Error("Invalid query or provider");
     const { data } = await API.get(`search/${provider}?q=${query}`);
 
     return data.results.map((item: TorrentData) => ({

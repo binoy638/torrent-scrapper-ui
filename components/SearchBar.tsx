@@ -1,8 +1,9 @@
-import { Chip, Chips, Input, Tooltip, Button } from "@mantine/core";
+import { Chip, Chips, Input, Button } from "@mantine/core";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { ChangeEvent } from "react";
 import { ImSearch } from "react-icons/im";
+import { useIsFirstRender } from "../hooks/useIsFirstRender";
 
 function SearchBar() {
   const router = useRouter();
@@ -13,7 +14,15 @@ function SearchBar() {
 
   const [provider, setProvider] = useState<string | string[]>("1337x");
 
+  const firstRender = useIsFirstRender();
+
   useEffect(() => {
+    if (!router.isReady) return;
+    if (site === undefined || query === undefined) {
+      if (router.pathname !== "/") {
+        router.push("/");
+      }
+    }
     if (
       site === "1337x" ||
       site === "tpb" ||
@@ -22,7 +31,17 @@ function SearchBar() {
     ) {
       setProvider(site);
     }
-  }, [site]);
+  }, [site, query, router, router.isReady]);
+
+  useEffect(() => {
+    if (provider === site || site === undefined) return;
+    if (!query || query.length === 0) return;
+    router.push({
+      pathname: "/search",
+      query: { query, site: provider },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [provider]);
 
   const submitHandler = (event: ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -44,6 +63,7 @@ function SearchBar() {
     <form onSubmit={submitHandler} className="flex flex-col gap-6  ">
       <Input
         name="query"
+        defaultValue={query}
         placeholder="Search..."
         rightSection={rightSection}
       />
