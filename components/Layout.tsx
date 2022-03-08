@@ -3,6 +3,7 @@ import { ActionIcon, Text, useMantineColorScheme } from "@mantine/core";
 import { MoonIcon, SunIcon } from "@heroicons/react/solid";
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const dark = colorScheme === "dark";
   return (
     <>
       <Head>
@@ -16,13 +17,18 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           onClick={() => toggleColorScheme()}
           className=" absolute right-0 px-4 py-4"
         >
-          <Text>
-            {colorScheme === "dark" ? (
-              <SunIcon className="h-5 w-5 text-yellow-100 cursor-pointer" />
+          <ActionIcon
+            variant="outline"
+            color={dark ? "yellow" : "blue"}
+            onClick={() => toggleColorScheme()}
+            title="Toggle color scheme"
+          >
+            {dark ? (
+              <SunIcon className="h-5 w-5 " />
             ) : (
-              <MoonIcon className="h-5 w-5 text-gray-500 cursor-pointer" />
+              <MoonIcon className="h-5 w-5 " />
             )}
-          </Text>
+          </ActionIcon>
         </div>
         <main className="px-4 lg:px-24 py-4 lg:py-12 h-screen">{children}</main>
       </section>
