@@ -1,4 +1,4 @@
-Torrent Search Engine built using Nextjs.
+# Torrent Search Engine built using Nextjs.
 
 ## Getting Started
 
