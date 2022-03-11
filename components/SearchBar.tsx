@@ -64,6 +64,14 @@ function SearchBar() {
         placeholder="Search..."
         rightSection={rightSection}
       />
+      <div className="flex justify-center">
+        <Chips value={provider} onChange={setProvider}>
+          <Chip value="1337x">1337x</Chip>
+          {/* <Chip value="rarbg">Rarbg</Chip> */}
+          <Chip value="tpb">The Pirate Bay</Chip>
+          <Chip value="nyaa">Nyaa</Chip>
+        </Chips>
+      </div>
     </form>
   );
 }

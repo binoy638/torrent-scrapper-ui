@@ -1,6 +1,7 @@
 import Head from "next/head";
-import { ActionIcon, Text, useMantineColorScheme } from "@mantine/core";
+import { ActionIcon, useMantineColorScheme } from "@mantine/core";
 import { MoonIcon, SunIcon } from "@heroicons/react/solid";
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
