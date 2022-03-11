@@ -5,6 +5,8 @@ import {
   MantineProvider,
   ColorSchemeProvider,
   ColorScheme,
+  NormalizeCSS,
+  GlobalStyles,
 } from "@mantine/core";
 import { useState } from "react";
 import "../styles/globals.css";
@@ -27,6 +29,8 @@ function MyApp({ Component, pageProps }: AppProps) {
           withNormalizeCSS
           theme={{ colorScheme }}
         >
+          <NormalizeCSS />
+          <GlobalStyles />
           <Layout>
             <Component {...pageProps} />
           </Layout>
