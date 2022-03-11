@@ -1,9 +1,5 @@
 import type { NextPage } from "next";
-import { ChangeEvent, useState } from "react";
-import Head from "next/head";
-import { useRouter } from "next/router";
 import SearchBar from "../components/SearchBar";
-import { Provider } from "../@types";
 import Link from "next/link";
 
 const Home: NextPage = () => {
@@ -30,3 +26,9 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+export async function getStaticProps() {
+  return {
+    props: {}, // will be passed to the page component as props
+  };
+}
