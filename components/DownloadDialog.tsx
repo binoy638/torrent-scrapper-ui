@@ -102,7 +102,7 @@ export default function DownloadDialog({
                     label="link copied"
                     withArrow
                     opened={copied}
-                    delay={500}
+                    closeDelay={500}
                   >
                     <ClipboardIcon className="h-6 w-6 lg:h-10 lg:w-10 cursor-pointer" />
                   </Tooltip>

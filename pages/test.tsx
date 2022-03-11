@@ -1,16 +1,16 @@
-import React from "react";
+import { Chip, Chips } from "@mantine/core";
+import React, { useState } from "react";
 
 function Test() {
+  const [provider, setProvider] = useState<string | string[]>("1337x");
   return (
     <div className="">
-      <button
-        type="button"
-        onClick={() => {
-          throw new Error("Sentry Frontend yo Error");
-        }}
-      >
-        Throw error
-      </button>
+      <Chips value={provider} onChange={setProvider}>
+        <Chip value="1337x">1337x</Chip>
+        {/* <Chip value="rarbg">Rarbg</Chip> */}
+        <Chip value="tpb">The Pirate Bay</Chip>
+        <Chip value="nyaa">Nyaa</Chip>
+      </Chips>
     </div>
   );
 }

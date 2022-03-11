@@ -24,9 +24,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             title="Toggle color scheme"
           >
             {dark ? (
-              <SunIcon className="h-5 w-5 " />
+              <SunIcon style={{ height: "20px", width: "20x" }} />
             ) : (
-              <MoonIcon className="h-5 w-5 " />
+              <MoonIcon style={{ height: "20px", width: "20x" }} />
             )}
           </ActionIcon>
         </div>

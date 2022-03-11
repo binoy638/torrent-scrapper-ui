@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { ChangeEvent } from "react";
 import { ImSearch } from "react-icons/im";
-import { useIsFirstRender } from "../hooks/useIsFirstRender";
 
 function SearchBar() {
   const router = useRouter();
@@ -13,8 +12,6 @@ function SearchBar() {
   const query = router.query.query as string;
 
   const [provider, setProvider] = useState<string | string[]>("1337x");
-
-  const firstRender = useIsFirstRender();
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -67,14 +64,6 @@ function SearchBar() {
         placeholder="Search..."
         rightSection={rightSection}
       />
-      <div className="flex justify-center">
-        <Chips value={provider} onChange={setProvider}>
-          <Chip value="1337x">1337x</Chip>
-          {/* <Chip value="rarbg">Rarbg</Chip> */}
-          <Chip value="tpb">The Pirate Bay</Chip>
-          <Chip value="nyaa">Nyaa</Chip>
-        </Chips>
-      </div>
     </form>
   );
 }
