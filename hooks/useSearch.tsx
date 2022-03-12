@@ -1,12 +1,22 @@
 import { useQuery } from "react-query";
-import { Provider } from "../@types";
+import { FilterMode, FilterType, Provider } from "../@types";
 
 import { searchTorrentAPI } from "../API";
 
-function useSearch(query: string, provider: Provider) {
+function useSearch(
+  query: string,
+  provider: Provider,
+  filterType: FilterType,
+  filterMode: FilterMode
+) {
   return useQuery(
-    ["search", query, provider],
-    () => searchTorrentAPI(query, provider),
+    ["search", query, provider, filterType, filterMode],
+    () => {
+      if (!query || !provider) return;
+      if (filterMode && !filterType) return;
+      if (filterType && !filterMode) return;
+      return searchTorrentAPI(query, provider, filterType, filterMode);
+    },
     {
       enabled: !!query,
     }

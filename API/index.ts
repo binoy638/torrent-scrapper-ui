@@ -1,13 +1,23 @@
-import { Provider, TorrentData } from "../@types";
+import { FilterMode, FilterType, Provider, TorrentData } from "../@types";
 import { API } from "./config";
 
 export const searchTorrentAPI = async (
   query: string,
-  provider: Provider
+  provider: Provider,
+  filterType: FilterType = null,
+  filterMode: FilterMode = null
 ): Promise<TorrentData[]> => {
   try {
     if (!query || !provider) throw new Error("Invalid query or provider");
-    const { data } = await API.get(`search/${provider}?q=${query}`);
+
+    let url = `search/${provider}?q=${query}`;
+
+    if (filterMode && filterType)
+      url += `&filtertype=${filterType}&filtermode=${filterMode}`;
+
+    if (filterType === "time") url += "&cache=false";
+
+    const { data } = await API.get(url);
 
     return data.results.map((item: TorrentData) => ({
       ...item,

@@ -16,7 +16,7 @@ export const convertToBytes = (str: string) => {
 };
 
 export const nextFilterState = (current: FilterState) => {
-  if (current === null) return "dsc";
-  if (current === "dsc") return "asc";
-  else return "dsc";
+  if (current === null) return "desc";
+  if (current === "desc") return "asc";
+  else return "desc";
 };

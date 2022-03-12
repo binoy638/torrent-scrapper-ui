@@ -12,7 +12,7 @@ export interface TorrentData {
   added: number;
 }
 
-export type FilterState = null | "asc" | "dsc";
+export type FilterState = null | "asc" | "desc";
 
 export interface Filter {
   size: FilterState;
@@ -20,3 +20,7 @@ export interface Filter {
   leeches: FilterState;
   added: FilterState;
 }
+
+export type FilterType = "seeders" | "leechers" | "size" | "time" | null;
+
+export type FilterMode = "asc" | "desc" | null;

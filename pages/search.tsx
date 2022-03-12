@@ -3,7 +3,13 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import SearchBar from "../components/SearchBar";
-import { Provider, TorrentData, Filter } from "../@types";
+import {
+  Provider,
+  TorrentData,
+  Filter,
+  FilterType,
+  FilterMode,
+} from "../@types";
 import Download from "../components/DownloadDialog";
 import { convertToBytes, nextFilterState } from "../utils";
 import useSearch from "../hooks/useSearch";
@@ -11,18 +17,20 @@ import { Table, Loader } from "@mantine/core";
 import { ArrowNarrowDownIcon, ArrowNarrowUpIcon } from "@heroicons/react/solid";
 
 const Search: NextPage = () => {
-  const [filter, setFilter] = useState<Filter>({
-    size: null,
-    seeds: "dsc",
-    leeches: null,
-    added: null,
-  });
   const router = useRouter();
 
   const query = router.query.query as string;
   const site = router.query.site as Provider;
 
-  const { isLoading, isError, data } = useSearch(query, site);
+  const [filterType, setFilterType] = useState<FilterType>(null);
+  const [filterMode, setFilterMode] = useState<FilterMode>(null);
+
+  const { isLoading, isError, data } = useSearch(
+    query,
+    site,
+    filterType,
+    filterMode
+  );
 
   const [torrents, setTorrents] = useState<TorrentData[]>([]);
 
@@ -41,52 +49,15 @@ const Search: NextPage = () => {
     setOpen(true);
   };
 
-  const filterHandler = (col: "seeds" | "leeches" | "size" | "added") => {
-    const currentFilter = filter[col];
+  const filterHandler = (type: FilterType) => {
+    setFilterType(type);
+    setFilterMode(nextFilterState(filterMode));
+  };
 
-    const nextFilter = nextFilterState(currentFilter);
-
-    if (col === "size") {
-      const newData = [...torrents].sort(
-        (arrayItemA: TorrentData, arrayItemB: TorrentData) => {
-          if (nextFilter === "asc")
-            return (
-              +convertToBytes(arrayItemA[col]) -
-              +convertToBytes(arrayItemB[col])
-            );
-          else
-            return (
-              +convertToBytes(arrayItemB[col]) -
-              +convertToBytes(arrayItemA[col])
-            );
-        }
-      );
-
-      setFilter(
-        Object.assign(
-          {},
-          { size: null, seeds: null, leeches: null, added: null },
-          { [col]: nextFilter }
-        )
-      );
-      setTorrents(newData);
-      return;
-    }
-    const newData = [...torrents].sort(
-      (arrayItemA: TorrentData, arrayItemB: TorrentData) => {
-        if (nextFilter === "asc") return +arrayItemA[col] - +arrayItemB[col];
-        else return +arrayItemB[col] - +arrayItemA[col];
-      }
-    );
-
-    setFilter(
-      Object.assign(
-        {},
-        { size: null, seeds: null, leeches: null, added: null },
-        { [col]: nextFilter }
-      )
-    );
-    setTorrents(newData);
+  const filterStateHandler = (type: FilterType): FilterMode => {
+    if (type === filterType) {
+      return filterMode;
+    } else return null;
   };
 
   return (
@@ -111,32 +82,32 @@ const Search: NextPage = () => {
         <div>Something went wrong</div>
       ) : (
         <div className="overflow-hidden overflow-x-scroll scrollbar-hide lg:overflow-x-hidden">
-          <Table>
+          <Table highlightOnHover>
             <thead>
               <tr>
                 <th>Name</th>
 
                 <FilterHeaders
                   label="Size"
-                  filterState={filter.size}
+                  filterState={filterStateHandler("size")}
                   clickHandler={() => filterHandler("size")}
                 />
 
                 <FilterHeaders
                   label="Seeds"
-                  filterState={filter.seeds}
-                  clickHandler={() => filterHandler("seeds")}
+                  filterState={filterStateHandler("seeders")}
+                  clickHandler={() => filterHandler("seeders")}
                 />
                 <FilterHeaders
                   label="Leeches"
-                  filterState={filter.leeches}
-                  clickHandler={() => filterHandler("leeches")}
+                  filterState={filterStateHandler("leechers")}
+                  clickHandler={() => filterHandler("leechers")}
                 />
 
                 <FilterHeaders
                   label="Added"
-                  filterState={filter.added}
-                  clickHandler={() => filterHandler("added")}
+                  filterState={filterStateHandler("time")}
+                  clickHandler={() => filterHandler("time")}
                 />
 
                 <th>Uploader</th>
@@ -147,7 +118,8 @@ const Search: NextPage = () => {
                 return (
                   <tr key={torrent.name + index}>
                     <td
-                      className="cursor-pointer hover:underline"
+                      style={{ maxWidth: "40rem" }}
+                      className="cursor-pointer"
                       onClick={() => torrentSeleteHandler(torrent)}
                     >
                       {torrent.name}
@@ -175,7 +147,7 @@ export default Search;
 
 interface FilterHeadersProps {
   label: string;
-  filterState: "asc" | "dsc" | null;
+  filterState: FilterMode;
   clickHandler: () => void;
 }
 
@@ -192,7 +164,7 @@ const FilterHeaders = ({
       {label}
       {filterState === "asc" ? (
         <ArrowNarrowUpIcon className="h-4 w-4 text-primary" />
-      ) : filterState === "dsc" ? (
+      ) : filterState === "desc" ? (
         <ArrowNarrowDownIcon className="h-4 w-4 text-primary" />
       ) : null}
     </th>
