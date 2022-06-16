@@ -11,6 +11,8 @@ function SearchBar() {
 
   const query = router.query.query as string;
 
+  const page = router.query.page as string;
+
   const [provider, setProvider] = useState<string | string[]>("1337x");
 
   useEffect(() => {
@@ -35,7 +37,7 @@ function SearchBar() {
     if (!query || query.length === 0) return;
     router.push({
       pathname: "/search",
-      query: { query, site: provider },
+      query: { query, site: provider, page },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [provider]);
@@ -45,7 +47,7 @@ function SearchBar() {
 
     router.push({
       pathname: "/search",
-      query: { query: event.target.query.value, site: provider },
+      query: { query: event.target.query.value, site: provider, page: 1 },
     });
   };
   const rightSection = (
@@ -68,7 +70,7 @@ function SearchBar() {
         <Chips value={provider} onChange={setProvider}>
           <Chip value="1337x">1337x</Chip>
           <Chip value="rarbg">Rarbg</Chip>
-          <Chip value="tpb">The Pirate Bay</Chip>
+          {/* <Chip value="tpb">The Pirate Bay</Chip> */}
           <Chip value="nyaa">Nyaa</Chip>
         </Chips>
       </div>

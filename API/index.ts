@@ -4,13 +4,15 @@ import { API } from "./config";
 export const searchTorrentAPI = async (
   query: string,
   provider: Provider,
+  page: number,
   filterType: FilterType = null,
   filterMode: FilterMode = null
 ): Promise<TorrentData[]> => {
   try {
-    if (!query || !provider) throw new Error("Invalid query or provider");
+    if (!query || !provider || !page)
+      throw new Error("Invalid query or provider");
 
-    let url = `search/${provider}?q=${query}`;
+    let url = `search/${provider}?q=${query}&page=${page}`;
 
     if (filterMode && filterType)
       url += `&filtertype=${filterType}&filtermode=${filterMode}`;

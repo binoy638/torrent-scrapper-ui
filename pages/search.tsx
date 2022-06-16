@@ -3,24 +3,23 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import SearchBar from "../components/SearchBar";
-import {
-  Provider,
-  TorrentData,
-  Filter,
-  FilterType,
-  FilterMode,
-} from "../@types";
+import { Provider, TorrentData, FilterType, FilterMode } from "../@types";
 import Download from "../components/DownloadDialog";
-import { convertToBytes, nextFilterState } from "../utils";
+import { nextFilterState } from "../utils";
 import useSearch from "../hooks/useSearch";
-import { Table, Loader } from "@mantine/core";
+import { Table, Pagination } from "@mantine/core";
 import { ArrowNarrowDownIcon, ArrowNarrowUpIcon } from "@heroicons/react/solid";
+import NotFound from "../components/NotFound";
+import { TableBody } from "../components/DisplayRows";
 
 const Search: NextPage = () => {
   const router = useRouter();
 
   const query = router.query.query as string;
   const site = router.query.site as Provider;
+  const page = router.query.page as string;
+
+  const [pageNo, setPageNo] = useState(1);
 
   const [filterType, setFilterType] = useState<FilterType>(null);
   const [filterMode, setFilterMode] = useState<FilterMode>(null);
@@ -28,11 +27,18 @@ const Search: NextPage = () => {
   const { isLoading, isError, data } = useSearch(
     query,
     site,
+    pageNo,
     filterType,
     filterMode
   );
 
   const [torrents, setTorrents] = useState<TorrentData[]>([]);
+
+  useEffect(() => {
+    if (router.isReady) {
+      setPageNo(Number(page));
+    }
+  }, [page, router.isReady]);
 
   useEffect(() => {
     if (data) {
@@ -43,11 +49,6 @@ const Search: NextPage = () => {
   const [dopen, setOpen] = useState(false);
 
   const [dialogData, setDialogData] = useState<TorrentData>();
-
-  const torrentSeleteHandler = (data: TorrentData) => {
-    setDialogData(data);
-    setOpen(true);
-  };
 
   const filterHandler = (type: FilterType) => {
     setFilterType(type);
@@ -60,8 +61,19 @@ const Search: NextPage = () => {
     } else return null;
   };
 
+  const handlePagination = (page: number) => {
+    router.push({
+      pathname: "/search",
+      query: { query, site, page },
+    });
+  };
+
+  if (isError) {
+    <NotFound title="Something went wrong" />;
+  }
+
   return (
-    <div className="flex flex-col gap-8 ">
+    <div className="flex flex-col gap-8 pb-10">
       <h1 className="text-4xl lg:text-5xl font-bold gap-2 justify-center flex">
         <Link href={"/"} passHref>
           <a>
@@ -69,76 +81,58 @@ const Search: NextPage = () => {
           </a>
         </Link>
       </h1>
-
       <div className="center" style={{ flexDirection: "column", gap: "1rem" }}>
         <SearchBar />
       </div>
 
-      {isLoading ? (
-        <div className="flex justify-center items-center w-full h-56">
-          <Loader className="h-6 w-6 lg:h-10 lg:w-10" color="gray" />
-        </div>
-      ) : isError ? (
-        <div>Something went wrong</div>
-      ) : (
-        <div className="overflow-hidden overflow-x-scroll scrollbar-hide lg:overflow-x-hidden">
-          <Table highlightOnHover>
-            <thead>
-              <tr>
-                <th>Name</th>
+      <div className="overflow-hidden overflow-x-scroll scrollbar-hide lg:overflow-x-hidden">
+        <Table highlightOnHover striped>
+          <thead>
+            <tr>
+              <th>Name</th>
 
-                <FilterHeaders
-                  label="Size"
-                  filterState={filterStateHandler("size")}
-                  clickHandler={() => filterHandler("size")}
-                />
+              <FilterHeaders
+                label="Size"
+                filterState={filterStateHandler("size")}
+                clickHandler={() => filterHandler("size")}
+              />
 
-                <FilterHeaders
-                  label="Seeds"
-                  filterState={filterStateHandler("seeders")}
-                  clickHandler={() => filterHandler("seeders")}
-                />
-                <FilterHeaders
-                  label="Leeches"
-                  filterState={filterStateHandler("leechers")}
-                  clickHandler={() => filterHandler("leechers")}
-                />
+              <FilterHeaders
+                label="Seeds"
+                filterState={filterStateHandler("seeders")}
+                clickHandler={() => filterHandler("seeders")}
+              />
+              <FilterHeaders
+                label="Leeches"
+                filterState={filterStateHandler("leechers")}
+                clickHandler={() => filterHandler("leechers")}
+              />
 
-                <FilterHeaders
-                  label="Added"
-                  filterState={filterStateHandler("time")}
-                  clickHandler={() => filterHandler("time")}
-                />
+              <FilterHeaders
+                label="Added"
+                filterState={filterStateHandler("time")}
+                clickHandler={() => filterHandler("time")}
+              />
 
-                <th>Uploader</th>
-              </tr>
-            </thead>
-            <tbody>
-              {torrents.map((torrent, index) => {
-                return (
-                  <tr key={torrent.name + index}>
-                    <td
-                      style={{ maxWidth: "40rem" }}
-                      className="cursor-pointer"
-                      onClick={() => torrentSeleteHandler(torrent)}
-                    >
-                      {torrent.name}
-                    </td>
-                    <td>{torrent.size}</td>
-                    <td>{torrent.seeds}</td>
-                    <td>{torrent.leeches}</td>
-                    <td>{new Date(torrent.added * 1000).toDateString()}</td>
-                    <td>{torrent.uploader}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </Table>
-          {dialogData && (
-            <Download open={dopen} setOpen={setOpen} data={dialogData} />
-          )}
-        </div>
-      )}
+              <th>Uploader</th>
+            </tr>
+          </thead>
+
+          <TableBody
+            torrents={torrents}
+            isLoading={isLoading}
+            setDialogData={setDialogData}
+            setOpen={setOpen}
+          />
+        </Table>
+        {dialogData && (
+          <Download open={dopen} setOpen={setOpen} data={dialogData} />
+        )}
+      </div>
+
+      <div className="flex items-center justify-center">
+        <Pagination page={pageNo} onChange={handlePagination} total={10} />
+      </div>
     </div>
   );
 };

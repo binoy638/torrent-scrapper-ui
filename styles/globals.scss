@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    -webkit-tap-highlight-color: transparent !important;
+  }
+  body::-webkit-scrollbar {
+    display: none;
+  }
+  body {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+@import "~ag-grid-community/src/styles/ag-grid.scss";
+@import "~ag-grid-community/src/styles/ag-theme-alpine-dark/sass/ag-theme-alpine-dark-mixin";
+
+.ag-theme-alpine-dark .ag-root-wrapper {
+
+  --ag-range-selection-border-color: transparent;
+  --ag-foreground-color:#C1C2C5;
+  .ag-header {
+      --ag-foreground-color:#fff;
+  }
+}
+

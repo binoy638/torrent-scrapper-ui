@@ -9,7 +9,7 @@ import {
   GlobalStyles,
 } from "@mantine/core";
 import { useState } from "react";
-import "../styles/globals.css";
+import "../styles/globals.scss";
 import Layout from "../components/Layout";
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -27,6 +27,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <MantineProvider
           withGlobalStyles
           withNormalizeCSS
+          emotionOptions={{ key: "mantine", prepend: false }}
           theme={{ colorScheme }}
         >
           <NormalizeCSS />
