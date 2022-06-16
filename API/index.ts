@@ -12,7 +12,11 @@ export const searchTorrentAPI = async (
     if (!query || !provider || !page)
       throw new Error("Invalid query or provider");
 
-    let url = `search/${provider}?q=${query}&page=${page}`;
+    const isNSFW = query.split(" ")[0] === "!x";
+
+    if (isNSFW) query = query.split(" ").slice(1).join(" ").trim();
+
+    let url = `search/${provider}?q=${query}&page=${page}&nsfw=${isNSFW}`;
 
     if (filterMode && filterType)
       url += `&filtertype=${filterType}&filtermode=${filterMode}`;
