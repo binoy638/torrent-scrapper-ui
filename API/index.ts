@@ -7,7 +7,7 @@ export const searchTorrentAPI = async (
   page: number,
   filterType: FilterType = null,
   filterMode: FilterMode = null
-): Promise<TorrentData[]> => {
+): Promise<{ torrents: TorrentData[]; totalPages: number }> => {
   try {
     if (!query || !provider || !page)
       throw new Error("Invalid query or provider");
@@ -23,12 +23,17 @@ export const searchTorrentAPI = async (
 
     if (filterType === "time") url += "&cache=false";
 
-    const { data } = await API.get(url);
+    const { data } = await API.get<{
+      torrents: TorrentData[];
+      totalPages: number;
+    }>(url);
 
-    return data.results.map((item: TorrentData) => ({
+    const torrents = data.torrents.map((item: TorrentData) => ({
       ...item,
       provider,
     }));
+
+    return { torrents, totalPages: data.totalPages };
   } catch (error) {
     console.log(error);
     throw new Error("Error while searching torrents");

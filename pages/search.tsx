@@ -42,7 +42,7 @@ const Search: NextPage = () => {
 
   useEffect(() => {
     if (data) {
-      setTorrents(data);
+      setTorrents(data.torrents);
     }
   }, [data]);
 
