@@ -1,17 +1,15 @@
-import { Loader, Skeleton } from "@mantine/core";
 import React, { FC } from "react";
 import { TorrentData } from "../@types";
 
 interface TableBodyProps {
   torrents: TorrentData[];
-  isLoading: boolean;
   setDialogData: React.Dispatch<React.SetStateAction<TorrentData | undefined>>;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const TableBody: FC<TableBodyProps> = ({
   torrents,
-  isLoading,
+
   setDialogData,
   setOpen,
 }) => {
@@ -19,17 +17,7 @@ export const TableBody: FC<TableBodyProps> = ({
     setDialogData(data);
     setOpen(true);
   };
-  if (isLoading) {
-    return (
-      <tbody>
-        {Array.from({ length: 15 }).map((_, i) => (
-          <tr key={i}>
-            <td className="h-10" colSpan={6}></td>
-          </tr>
-        ))}
-      </tbody>
-    );
-  }
+
   return (
     <tbody>
       {torrents.map((torrent, index) => {

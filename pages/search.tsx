@@ -7,10 +7,12 @@ import { Provider, TorrentData, FilterType, FilterMode } from "../@types";
 import Download from "../components/DownloadDialog";
 import { nextFilterState } from "../utils";
 import useSearch from "../hooks/useSearch";
-import { Table, Pagination } from "@mantine/core";
+import { Table, Pagination, Loader } from "@mantine/core";
 import { ArrowNarrowDownIcon, ArrowNarrowUpIcon } from "@heroicons/react/solid";
 import NotFound from "../components/NotFound";
 import { TableBody } from "../components/DisplayRows";
+import { SearchPageLayout } from "../components/SearchPageLayout";
+import BarsSvg from "../components/BarsSvg";
 
 const Search: NextPage = () => {
   const router = useRouter();
@@ -32,19 +34,11 @@ const Search: NextPage = () => {
     filterMode
   );
 
-  const [torrents, setTorrents] = useState<TorrentData[]>([]);
-
   useEffect(() => {
     if (router.isReady) {
       setPageNo(Number(page));
     }
   }, [page, router.isReady]);
-
-  useEffect(() => {
-    if (data) {
-      setTorrents(data.torrents);
-    }
-  }, [data]);
 
   const [dopen, setOpen] = useState(false);
 
@@ -68,23 +62,34 @@ const Search: NextPage = () => {
     });
   };
 
-  if (isError) {
-    <NotFound title="Something went wrong" />;
+  if (isLoading || !data)
+    return (
+      <SearchPageLayout>
+        <div className="flex justify-center items-center h-96">
+          <BarsSvg />
+        </div>
+      </SearchPageLayout>
+    );
+
+  if (isError)
+    return (
+      <SearchPageLayout>
+        <NotFound title="Something went wrong" />
+      </SearchPageLayout>
+    );
+
+  if (data.torrents.length === 0) {
+    return (
+      <SearchPageLayout>
+        <div className="flex justify-center items-center h-96">
+          <NotFound title="No results found" />
+        </div>
+      </SearchPageLayout>
+    );
   }
 
   return (
-    <div className="flex flex-col gap-8 pb-10">
-      <h1 className="text-4xl lg:text-5xl font-bold gap-2 justify-center flex">
-        <Link href={"/"} passHref>
-          <a>
-            Torrent <span className="text-primary">Ocean</span>
-          </a>
-        </Link>
-      </h1>
-      <div className="center" style={{ flexDirection: "column", gap: "1rem" }}>
-        <SearchBar />
-      </div>
-
+    <SearchPageLayout>
       <div className="overflow-hidden overflow-x-scroll scrollbar-hide lg:overflow-x-hidden">
         <Table highlightOnHover striped>
           <thead>
@@ -119,8 +124,7 @@ const Search: NextPage = () => {
           </thead>
 
           <TableBody
-            torrents={torrents}
-            isLoading={isLoading}
+            torrents={data.torrents}
             setDialogData={setDialogData}
             setOpen={setOpen}
           />
@@ -131,9 +135,13 @@ const Search: NextPage = () => {
       </div>
 
       <div className="flex items-center justify-center">
-        <Pagination page={pageNo} onChange={handlePagination} total={10} />
+        <Pagination
+          page={pageNo}
+          onChange={handlePagination}
+          total={data.totalPages}
+        />
       </div>
-    </div>
+    </SearchPageLayout>
   );
 };
 

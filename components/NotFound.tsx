@@ -1,6 +1,6 @@
-import { ExclamationCircleIcon } from '@heroicons/react/outline';
-import { Text } from '@mantine/core';
-import React, { FC } from 'react';
+import { ExclamationCircleIcon } from "@heroicons/react/outline";
+import { Text } from "@mantine/core";
+import React, { FC } from "react";
 
 interface NotFoundProps {
   title: string;
@@ -9,9 +9,9 @@ interface NotFoundProps {
 const NotFound: FC<NotFoundProps> = ({ title }) => {
   return (
     <div className="flex justify-center items-center h-full">
-      <div className="flex-col justify-center items-center ">
-        <ExclamationCircleIcon className="h-48 w-48 " />
-        <Text size="xl" weight={'bold'} align={'center'}>
+      <div className="flex flex-col justify-center items-center ">
+        <ExclamationCircleIcon className="h-32 w-32 " />
+        <Text size="xl" weight={"bold"}>
           {title}
         </Text>
       </div>
