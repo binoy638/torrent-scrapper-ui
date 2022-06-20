@@ -62,19 +62,19 @@ const Search: NextPage = () => {
     });
   };
 
+  if (isError)
+    return (
+      <SearchPageLayout>
+        <NotFound title="Something went wrong" />
+      </SearchPageLayout>
+    );
+
   if (isLoading || !data)
     return (
       <SearchPageLayout>
         <div className="flex justify-center items-center h-96">
           <BarsSvg />
         </div>
-      </SearchPageLayout>
-    );
-
-  if (isError)
-    return (
-      <SearchPageLayout>
-        <NotFound title="Something went wrong" />
       </SearchPageLayout>
     );
 
