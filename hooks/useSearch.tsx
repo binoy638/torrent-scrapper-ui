@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import { FilterMode, FilterType, Provider } from "../@types";
+import { Provider, SortMode, SortType } from "../@types";
 
 import { searchTorrentAPI } from "../API";
 
@@ -7,16 +7,16 @@ function useSearch(
   query: string,
   provider: Provider,
   page: number,
-  filterType: FilterType,
-  filterMode: FilterMode
+  sortType: SortType,
+  sortMode: SortMode
 ) {
   return useQuery(
-    ["search", query, page, provider, filterType, filterMode],
+    ["search", query, page, provider, sortType, sortMode],
     () => {
       if (!query || !provider) return;
-      if (filterMode && !filterType) return;
-      if (filterType && !filterMode) return;
-      return searchTorrentAPI(query, provider, page, filterType, filterMode);
+      if (sortMode && !sortType) return;
+      if (sortType && !sortMode) return;
+      return searchTorrentAPI(query, provider, page, sortType, sortMode);
     },
     {
       enabled: !!query,
