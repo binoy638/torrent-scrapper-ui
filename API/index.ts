@@ -1,12 +1,12 @@
-import { FilterMode, FilterType, Provider, TorrentData } from "../@types";
+import { SortMode, SortType, Provider, TorrentData } from "../@types";
 import { API } from "./config";
 
 export const searchTorrentAPI = async (
   query: string,
   provider: Provider,
   page: number,
-  filterType: FilterType = null,
-  filterMode: FilterMode = null
+  sortType: SortType = null,
+  sortMode: SortMode = null
 ): Promise<{ torrents: TorrentData[]; totalPages: number }> => {
   try {
     if (!query || !provider || !page)
@@ -18,10 +18,10 @@ export const searchTorrentAPI = async (
 
     let url = `search/${provider}?q=${query}&page=${page}&nsfw=${isNSFW}`;
 
-    if (filterMode && filterType)
-      url += `&filtertype=${filterType}&filtermode=${filterMode}`;
+    if (sortMode && sortType)
+      url += `&sort_type=${sortType}&sort_mode=${sortMode}`;
 
-    if (filterType === "time") url += "&cache=false";
+    if (sortType === "time") url += "&cache=false";
 
     const { data } = await API.get<{
       torrents: TorrentData[];

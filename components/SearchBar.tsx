@@ -13,7 +13,7 @@ function SearchBar() {
 
   const page = router.query.page as string;
 
-  const [provider, setProvider] = useState<string | string[]>("1337x");
+  const [provider, setProvider] = useState<string>("1337x");
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -67,10 +67,10 @@ function SearchBar() {
         rightSection={rightSection}
       />
       <div className="flex justify-center">
-        <Chips value={provider} onChange={setProvider}>
+        <Chips value={provider} multiple={false} onChange={setProvider}>
           <Chip value="1337x">1337x</Chip>
           <Chip value="rarbg">Rarbg</Chip>
-          {/* <Chip value="tpb">The Pirate Bay</Chip> */}
+          <Chip value="tpb">The Pirate Bay</Chip>
           <Chip value="nyaa">Nyaa</Chip>
         </Chips>
       </div>

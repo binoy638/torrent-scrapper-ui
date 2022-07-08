@@ -1,13 +1,11 @@
 import type { NextPage } from "next";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import SearchBar from "../components/SearchBar";
-import { Provider, TorrentData, FilterType, FilterMode } from "../@types";
+import { Provider, TorrentData, SortType, SortMode } from "../@types";
 import Download from "../components/DownloadDialog";
-import { nextFilterState } from "../utils";
+import { nextSortState } from "../utils";
 import useSearch from "../hooks/useSearch";
-import { Table, Pagination, Loader } from "@mantine/core";
+import { Table, Pagination } from "@mantine/core";
 import { ArrowNarrowDownIcon, ArrowNarrowUpIcon } from "@heroicons/react/solid";
 import NotFound from "../components/NotFound";
 import { TableBody } from "../components/DisplayRows";
@@ -23,15 +21,15 @@ const Search: NextPage = () => {
 
   const [pageNo, setPageNo] = useState(1);
 
-  const [filterType, setFilterType] = useState<FilterType>(null);
-  const [filterMode, setFilterMode] = useState<FilterMode>(null);
+  const [sortType, setSortType] = useState<SortType>(null);
+  const [sortMode, setSortMode] = useState<SortMode>(null);
 
   const { isLoading, isError, data } = useSearch(
     query,
     site,
     pageNo,
-    filterType,
-    filterMode
+    sortType,
+    sortMode
   );
 
   useEffect(() => {
@@ -44,14 +42,14 @@ const Search: NextPage = () => {
 
   const [dialogData, setDialogData] = useState<TorrentData>();
 
-  const filterHandler = (type: FilterType) => {
-    setFilterType(type);
-    setFilterMode(nextFilterState(filterMode));
+  const sortHandler = (type: SortType) => {
+    setSortType(type);
+    setSortMode(nextSortState(sortMode));
   };
 
-  const filterStateHandler = (type: FilterType): FilterMode => {
-    if (type === filterType) {
-      return filterMode;
+  const sortStateHandler = (type: SortType): SortMode => {
+    if (type === sortType) {
+      return sortMode;
     } else return null;
   };
 
@@ -96,27 +94,27 @@ const Search: NextPage = () => {
             <tr>
               <th>Name</th>
 
-              <FilterHeaders
+              <SortHeaders
                 label="Size"
-                filterState={filterStateHandler("size")}
-                clickHandler={() => filterHandler("size")}
+                sortState={sortStateHandler("size")}
+                clickHandler={() => sortHandler("size")}
               />
 
-              <FilterHeaders
+              <SortHeaders
                 label="Seeds"
-                filterState={filterStateHandler("seeders")}
-                clickHandler={() => filterHandler("seeders")}
+                sortState={sortStateHandler("seeders")}
+                clickHandler={() => sortHandler("seeders")}
               />
-              <FilterHeaders
+              <SortHeaders
                 label="Leeches"
-                filterState={filterStateHandler("leechers")}
-                clickHandler={() => filterHandler("leechers")}
+                sortState={sortStateHandler("leechers")}
+                clickHandler={() => sortHandler("leechers")}
               />
 
-              <FilterHeaders
+              <SortHeaders
                 label="Added"
-                filterState={filterStateHandler("time")}
-                clickHandler={() => filterHandler("time")}
+                sortState={sortStateHandler("time")}
+                clickHandler={() => sortHandler("time")}
               />
 
               <th>Uploader</th>
@@ -147,26 +145,22 @@ const Search: NextPage = () => {
 
 export default Search;
 
-interface FilterHeadersProps {
+interface SortHeadersProps {
   label: string;
-  filterState: FilterMode;
+  sortState: SortMode;
   clickHandler: () => void;
 }
 
-const FilterHeaders = ({
-  label,
-  filterState,
-  clickHandler,
-}: FilterHeadersProps) => {
+const SortHeaders = ({ label, sortState, clickHandler }: SortHeadersProps) => {
   return (
     <th
-      className={`cursor-pointer   ${filterState && "flex"} items-center`}
+      className={`cursor-pointer   ${sortState && "flex"} items-center`}
       onClick={clickHandler}
     >
       {label}
-      {filterState === "asc" ? (
+      {sortState === "asc" ? (
         <ArrowNarrowUpIcon className="h-4 w-4 text-primary" />
-      ) : filterState === "desc" ? (
+      ) : sortState === "desc" ? (
         <ArrowNarrowDownIcon className="h-4 w-4 text-primary" />
       ) : null}
     </th>

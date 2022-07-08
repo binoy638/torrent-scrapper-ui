@@ -1,4 +1,4 @@
-import { FilterState } from "../@types";
+import { SortState } from "../@types";
 
 export const convertToBytes = (str: string) => {
   const times: { [char: string]: number } = {
@@ -15,7 +15,7 @@ export const convertToBytes = (str: string) => {
   return +num * Math.pow(1024, times[byteSequence]);
 };
 
-export const nextFilterState = (current: FilterState) => {
+export const nextSortState = (current: SortState) => {
   if (current === null) return "desc";
   if (current === "desc") return "asc";
   else return "desc";

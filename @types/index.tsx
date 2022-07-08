@@ -12,15 +12,8 @@ export interface TorrentData {
   added: number;
 }
 
-export type FilterState = null | "asc" | "desc";
+export type SortState = null | "asc" | "desc";
 
-export interface Filter {
-  size: FilterState;
-  seeds: FilterState;
-  leeches: FilterState;
-  added: FilterState;
-}
+export type SortType = "seeders" | "leechers" | "size" | "time" | null;
 
-export type FilterType = "seeders" | "leechers" | "size" | "time" | null;
-
-export type FilterMode = "asc" | "desc" | null;
+export type SortMode = "asc" | "desc" | null;
